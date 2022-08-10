@@ -2,19 +2,19 @@ package ru.netology.del;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.BACK_SPACE;
 
-public class CardDeliveryTests {
+public class ComplexElementsCardTests {
     @BeforeEach
     void open() {
         Selenide.open("http://localhost:9999/");
@@ -25,10 +25,12 @@ public class CardDeliveryTests {
     }
 
     @Test
-    void shouildSucceedCardDelivery() {
-        $("[data-test-id=city] input").setValue("Казань");
+    void shouildSuccesComplexElementsCardDelivery() {
+        $("[data-test-id=city] input").setValue("Ка");
+        $$x("//div//span[@class='menu-item__control']").get(4).click();
         $("[data-test-id='date'] input").doubleClick().sendKeys(BACK_SPACE);
-        $("[data-test-id='date'] input").setValue(limitDate(7));
+        LocalDate inputWeek = LocalDate.now().plusDays(7);
+        $$("tr td").findBy(text(String.valueOf(inputWeek.getDayOfMonth()))).click();
         $("[data-test-id=name] input").setValue("Иван Иванов-Сидоров");
         $("[data-test-id=phone] input").setValue("+79453219968");
         $("[data-test-id=agreement]").click();
