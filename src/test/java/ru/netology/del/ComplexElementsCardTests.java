@@ -29,17 +29,23 @@ public class ComplexElementsCardTests {
         $("[data-test-id=city] input").setValue("Ка");
         $$x("//div//span[@class='menu-item__control']").get(4).click();
         $("[data-test-id='date'] input").doubleClick().sendKeys(BACK_SPACE);
-        LocalDate inputWeek = LocalDate.now().plusDays(7);
-        $$("tr td").findBy(text(String.valueOf(inputWeek.getDayOfMonth()))).click();
-        $("[data-test-id=name] input").setValue("Иван Иванов-Сидоров");
-        $("[data-test-id=phone] input").setValue("+79453219968");
-        $("[data-test-id=agreement]").click();
-        $(byText("Забронировать")).click();
-        $("[data-test-id='notification'] .notification__title")
-                .shouldBe(Condition.appear, Duration.ofSeconds(15))
-                .shouldHave((text("Успешно!")));
-        $("[data-test-id='notification'] .notification__content")
-                .shouldBe(Condition.visible)
-                .shouldHave(text("Встреча успешно забронирована на " + limitDate(7)));
+        int dayDelivery = LocalDate.now().plusDays(7).getDayOfMonth();
+        if (dayDelivery > 7) {
+            $$("tr td").findBy(text(String.valueOf( dayDelivery))).click();
+        }
+            else {
+                $("[data-step='1']").click();
+            $$("tr td").findBy(text(String.valueOf( dayDelivery))).click();
+            }
+            $("[data-test-id=name] input").setValue("Иван Иванов-Сидоров");
+            $("[data-test-id=phone] input").setValue("+79453219968");
+            $("[data-test-id=agreement]").click();
+            $(byText("Забронировать")).click();
+            $("[data-test-id='notification'] .notification__title")
+                    .shouldBe(Condition.appear, Duration.ofSeconds(15))
+                    .shouldHave((text("Успешно!")));
+            $("[data-test-id='notification'] .notification__content")
+                    .shouldBe(Condition.visible)
+                    .shouldHave(text("Встреча успешно забронирована на " + limitDate(7)));
+        }
     }
-}
